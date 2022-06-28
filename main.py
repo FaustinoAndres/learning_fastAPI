@@ -68,12 +68,14 @@ def show_person(
         min_length = 1,
         max_length = 50,
         title = "Person name",
-        description = "This is the name of the person"
+        description = "This is the name of the person",
+        example = "Faustino"
     ),
     age: str = Query(
         ...,
         title = "Age of the person",
-        description = "The age of the person"
+        description = "The age of the person",
+        example = 28
     )
 ):
 
@@ -85,7 +87,8 @@ def show_person(
 def show_person(
     person_id: int = Path(
         ...,
-        gt=0
+        gt = 0,
+        example = 22
     )
 ):
     return {person_id: "Its exits!"}
@@ -98,7 +101,8 @@ def update_person(
         ...,
         title = "person ID",
         description = "This is the person ID",
-        gt = 0
+        gt = 0,
+        example = 22
     ),
     person: Person = Body(...),
     location: Location = Body(...)
