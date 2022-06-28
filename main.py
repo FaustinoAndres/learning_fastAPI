@@ -7,6 +7,11 @@ app = FastAPI()
 
 #Models
 
+class Location(BaseModel):
+    city: str
+    state: str
+    country: str
+
 class Person(BaseModel):
     first_name: str
     last_name: str
@@ -22,7 +27,7 @@ def home() -> Dict:
 
 @app.post("/person/new")
 def create_person(person: Person = Body(...)):
-    return Person
+    return person
 
 #validaciones: query parameters
 @app.get("/person/detail")
@@ -33,13 +38,13 @@ def show_person(
         max_length = 50,
         title = "Person name",
         description = "This is the name of the person"
-        ),
+    ),
     age: str = Query(
         ...,
         title = "Age of the person",
         description = "The age of the person"
-        )
-    ):
+    )
+):
 
     return {name: age}
 
@@ -50,7 +55,24 @@ def show_person(
     person_id: int = Path(
         ...,
         gt=0
-        )
-    ):
+    )
+):
     return {person_id: "Its exits!"}
+
+
+#Validations: Body parameters, request body
+@app.put("/person/{person_id}")
+def update_person(
+    person_id: int = Path(
+        ...,
+        title = "person ID",
+        description = "This is the person ID",
+        gt = 0
+    ),
+    person: Person = Body(...),
+    location: Location = Body(...)
+):
+    results = person.dict()
+    results.update(location.dict())
+    return results
 
